@@ -18,11 +18,21 @@
                 <a href="#" onclick="showSection('home')">Home</a>
                 <a href="#" onclick="showSection('dashboard')" id="dashboard-link" style="display:none">Dashboard</a>
                 <a href="#" onclick="showSection('crisis')">Crisis Support</a>
+                <a href="#" onclick="showSection('advisor')" id="advisor-link" style="display:none">Book Advisor</a>
+                <a href="#" onclick="showSection('quotes')" id="quotes-link" style="display:none">Daily Quotes</a>
             </div>
-            <div class="auth-buttons">
-                <button onclick="showSection('login')" id="login-btn" class="btn btn-outline">Login</button>
-                <button onclick="showSection('signup')" id="signup-btn" class="btn btn-primary">Sign Up</button>
-                <button onclick="logout()" id="logout-btn" class="btn btn-outline" style="display:none">Logout</button>
+            <div class="nav-controls">
+                <div class="theme-toggle">
+                    <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()">
+                        <i class="fas fa-moon"></i>
+                        <span class="theme-text">Dark Mode</span>
+                    </button>
+                </div>
+                <div class="auth-buttons">
+                    <button onclick="showSection('login')" id="login-btn" class="btn btn-outline">Login</button>
+                    <button onclick="showSection('signup')" id="signup-btn" class="btn btn-primary">Sign Up</button>
+                    <button onclick="logout()" id="logout-btn" class="btn btn-outline" style="display:none">Logout</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -34,8 +44,8 @@
                 <h1>Your Mental Health Matters</h1>
                 <p>Supporting university students through their mental wellness journey</p>
                 <div class="hero-buttons">
-                    <button onclick="showSection('signup')" class="btn btn-primary">Get Started</button>
-                    <button onclick="showSection('login')" class="btn btn-outline">Login</button>
+                    <button onclick="showSection('signup')" class="btn btn-primary btn-large">Get Started</button>
+                    <button onclick="showSection('login')" class="btn btn-outline btn-large">Login</button>
                 </div>
             </div>
 
@@ -53,9 +63,14 @@
                         <p>Monitor your emotional wellbeing</p>
                     </div>
                     <div class="feature-card">
-                        <i class="fas fa-first-aid"></i>
-                        <h3>Crisis Support</h3>
-                        <p>Immediate access to emergency resources</p>
+                        <i class="fas fa-user-md"></i>
+                        <h3>Mental Health Advisors</h3>
+                        <p>Book appointments with certified professionals</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-quote-left"></i>
+                        <h3>Daily Inspiration</h3>
+                        <p>Motivational quotes for your mental wellness</p>
                     </div>
                 </div>
             </div>
@@ -66,10 +81,10 @@
             <div class="auth-container">
                 <div class="auth-card">
                     <h2>Welcome Back</h2>
-                    <form onsubmit="login(event)">
+                    <form id="login-form" onsubmit="login(event)">
                         <input type="email" id="login-email" placeholder="Email" required>
                         <input type="password" id="login-password" placeholder="Password" required>
-                        <button type="submit" class="btn btn-primary">Sign In</button>
+                        <button type="submit" class="btn btn-primary btn-large">Sign In</button>
                     </form>
                     <p>Don't have an account? <a href="#" onclick="showSection('signup')">Sign up</a></p>
                     <div id="login-error" class="error-message"></div>
@@ -82,14 +97,14 @@
             <div class="auth-container">
                 <div class="auth-card">
                     <h2>Create Account</h2>
-                    <form onsubmit="signup(event)">
+                    <form id="signup-form" onsubmit="signup(event)">
                         <input type="text" id="signup-firstname" placeholder="First Name" required>
                         <input type="text" id="signup-lastname" placeholder="Last Name" required>
                         <input type="email" id="signup-email" placeholder="Email" required>
                         <input type="text" id="signup-university" placeholder="University" required>
                         <input type="text" id="signup-studentid" placeholder="Student ID" required>
                         <input type="password" id="signup-password" placeholder="Password" required>
-                        <button type="submit" class="btn btn-primary">Create Account</button>
+                        <button type="submit" class="btn btn-primary btn-large">Create Account</button>
                     </form>
                     <p>Already have an account? <a href="#" onclick="showSection('login')">Sign in</a></p>
                     <div id="signup-error" class="error-message"></div>
@@ -100,29 +115,80 @@
         <!-- Dashboard Section -->
         <section id="dashboard" class="section">
             <div class="dashboard-container">
-                <h2>Welcome, <span id="user-name"></span>!</h2>
+                <div class="dashboard-header">
+                    <h2>Welcome to Your Dashboard, <span id="user-name">User</span>! 👋</h2>
+                    <p>Here's your mental wellness overview</p>
+                </div>
                 
                 <div class="dashboard-grid">
                     <div class="dashboard-card">
                         <h3><i class="fas fa-smile"></i> Today's Mood</h3>
+                        <p>How are you feeling today?</p>
                         <div class="mood-tracker">
-                            <div class="mood-option" onclick="trackMood('very_sad')">😢</div>
-                            <div class="mood-option" onclick="trackMood('sad')">😔</div>
-                            <div class="mood-option" onclick="trackMood('neutral')">😐</div>
-                            <div class="mood-option" onclick="trackMood('happy')">😊</div>
-                            <div class="mood-option" onclick="trackMood('very_happy')">😄</div>
+                            <div class="mood-option" data-mood="very_sad" onclick="trackMood(this)">
+                                <span>😢</span>
+                                <small>Very Sad</small>
+                            </div>
+                            <div class="mood-option" data-mood="sad" onclick="trackMood(this)">
+                                <span>😔</span>
+                                <small>Sad</small>
+                            </div>
+                            <div class="mood-option" data-mood="neutral" onclick="trackMood(this)">
+                                <span>😐</span>
+                                <small>Neutral</small>
+                            </div>
+                            <div class="mood-option" data-mood="happy" onclick="trackMood(this)">
+                                <span>😊</span>
+                                <small>Happy</small>
+                            </div>
+                            <div class="mood-option" data-mood="very_happy" onclick="trackMood(this)">
+                                <span>😄</span>
+                                <small>Very Happy</small>
+                            </div>
                         </div>
                     </div>
 
                     <div class="dashboard-card">
                         <h3><i class="fas fa-clipboard-check"></i> Self-Assessment</h3>
-                        <p>Check your mental health status</p>
+                        <p>Check your mental health status with our quick assessment</p>
                         <button onclick="startAssessment()" class="btn btn-primary">Start Assessment</button>
+                        <div id="last-assessment" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                            <!-- Last assessment result will appear here -->
+                        </div>
                     </div>
 
                     <div class="dashboard-card">
                         <h3><i class="fas fa-chart-line"></i> Mood History</h3>
-                        <div id="mood-history"></div>
+                        <div id="mood-history">
+                            <p>Track your first mood to see your history here!</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-calendar"></i> Quick Actions</h3>
+                        <div class="quick-actions">
+                            <button onclick="showSection('advisor')" class="btn btn-outline">Book Mental Advisor</button>
+                            <button onclick="showSection('crisis')" class="btn btn-outline">Crisis Support</button>
+                            <button onclick="showSection('quotes')" class="btn btn-outline">Daily Quotes</button>
+                            <button onclick="showSection('resources')" class="btn btn-outline">Resources</button>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-quote-left"></i> Today's Quote</h3>
+                        <div id="daily-quote-preview" class="daily-quote">
+                            <p id="quote-text">"Your mental health is a priority. Your happiness is essential. Your self-care is a necessity."</p>
+                            <small id="quote-author">- Unknown</small>
+                        </div>
+                        <button onclick="showSection('quotes')" class="btn btn-outline" style="margin-top: 1rem;">More Quotes</button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-user-md"></i> Advisor Status</h3>
+                        <div id="advisor-status">
+                            <p>No upcoming appointments</p>
+                        </div>
+                        <button onclick="showSection('advisor')" class="btn btn-primary" style="margin-top: 1rem;">Book Appointment</button>
                     </div>
                 </div>
             </div>
@@ -131,11 +197,20 @@
         <!-- Assessment Section -->
         <section id="assessment" class="section">
             <div class="assessment-container">
-                <h2>Mental Health Assessment</h2>
-                <div id="question-container"></div>
+                <div class="assessment-header">
+                    <h2>Mental Health Assessment</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p id="progress-text">Question 1 of 10</p>
+                </div>
+                
+                <div class="question-container" id="question-container">
+                    <!-- Questions will be loaded here dynamically -->
+                </div>
+                
                 <div class="assessment-nav">
                     <button onclick="previousQuestion()" id="prev-btn" class="btn btn-outline">Previous</button>
-                    <span id="progress">Question 1 of 9</span>
                     <button onclick="nextQuestion()" id="next-btn" class="btn btn-primary">Next</button>
                 </div>
             </div>
@@ -145,7 +220,117 @@
         <section id="results" class="section">
             <div class="results-container">
                 <h2>Assessment Results</h2>
-                <div id="results-content"></div>
+                <div id="results-content">
+                    <!-- Results will be displayed here -->
+                </div>
+                <button onclick="showSection('dashboard')" class="btn btn-primary">Back to Dashboard</button>
+            </div>
+        </section>
+
+        <!-- Mental Advisor Section -->
+        <section id="advisor" class="section">
+            <div class="advisor-container">
+                <h2><i class="fas fa-user-md"></i> Book Mental Health Advisor</h2>
+                <p>Schedule an appointment with our certified mental health professionals</p>
+                
+                <div class="advisors-grid">
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">DR</div>
+                        <h3>Dr. Sarah Johnson</h3>
+                        <p class="advisor-specialty">Clinical Psychologist</p>
+                        <p class="advisor-bio">Specializes in anxiety disorders and student mental health</p>
+                        <div class="advisor-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>(4.9/5)</span>
+                        </div>
+                        <button onclick="bookAdvisor('Dr. Sarah Johnson')" class="btn btn-primary">Book Session</button>
+                    </div>
+                    
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">MK</div>
+                        <h3>Michael Chen</h3>
+                        <p class="advisor-specialty">Licensed Therapist</p>
+                        <p class="advisor-bio">Expert in cognitive behavioral therapy and stress management</p>
+                        <div class="advisor-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span>(4.7/5)</span>
+                        </div>
+                        <button onclick="bookAdvisor('Michael Chen')" class="btn btn-primary">Book Session</button>
+                    </div>
+                    
+                    <div class="advisor-card">
+                        <div class="advisor-avatar">AR</div>
+                        <h3>Dr. Amanda Roberts</h3>
+                        <p class="advisor-specialty">Psychiatrist</p>
+                        <p class="advisor-bio">Focuses on medication management and severe mental health conditions</p>
+                        <div class="advisor-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>(4.8/5)</span>
+                        </div>
+                        <button onclick="bookAdvisor('Dr. Amanda Roberts')" class="btn btn-primary">Book Session</button>
+                    </div>
+                </div>
+                
+                <div class="booking-form" id="booking-form" style="display: none;">
+                    <h3>Book Appointment with <span id="selected-advisor"></span></h3>
+                    <form onsubmit="confirmBooking(event)">
+                        <input type="datetime-local" id="booking-date" required>
+                        <textarea id="booking-notes" placeholder="Any specific concerns or notes..." rows="3"></textarea>
+                        <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                        <button type="button" onclick="cancelBooking()" class="btn btn-outline">Cancel</button>
+                    </form>
+                </div>
+                
+                <div id="upcoming-appointments">
+                    <h3>Your Upcoming Appointments</h3>
+                    <div id="appointments-list">
+                        <!-- Appointments will be listed here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quotes Section -->
+        <section id="quotes" class="section">
+            <div class="quotes-container">
+                <h2><i class="fas fa-quote-left"></i> Daily Inspiration</h2>
+                <p>Motivational quotes to support your mental wellness journey</p>
+                
+                <div class="quote-of-day">
+                    <h3>Quote of the Day</h3>
+                    <div class="quote-card featured">
+                        <p id="daily-quote">"You don't have to control your thoughts. You just have to stop letting them control you."</p>
+                        <cite id="daily-author">- Dan Millman</cite>
+                    </div>
+                </div>
+                
+                <div class="quotes-grid">
+                    <div class="quote-card">
+                        <p>"Your present circumstances don't determine where you can go; they merely determine where you start."</p>
+                        <cite>- Nido Qubein</cite>
+                    </div>
+                    <div class="quote-card">
+                        <p>"The only journey is the journey within."</p>
+                        <cite>- Rainer Maria Rilke</cite>
+                    </div>
+                    <div class="quote-card">
+                        <p>"Mental health... is not a destination, but a process. It's about how you drive, not where you're going."</p>
+                        <cite>- Noam Shpancer</cite>
+                    </div>
+                    <div class="quote-card">
+                        <p>"What mental health needs is more sunlight, more candor, and more unashamed conversation."</p>
+                        <cite>- Glenn Close</cite>
+                    </div>
+                    <div class="quote-card">
+                        <p>"You are not your illness. You have an individual story to tell. You have a name, a history, a personality. Staying yourself is part of the battle."</p>
+                        <cite>- Julian Seifter</cite>
+                    </div>
+                    <div class="quote-card">
+                        <p>"There is hope, even when your brain tells you there isn't."</p>
+                        <cite>- John Green</cite>
+                    </div>
+                </div>
+                
                 <button onclick="showSection('dashboard')" class="btn btn-primary">Back to Dashboard</button>
             </div>
         </section>
@@ -154,9 +339,55 @@
         <section id="crisis" class="section">
             <div class="crisis-container">
                 <h2><i class="fas fa-first-aid"></i> Immediate Support</h2>
-                <p>If you're in crisis, please reach out immediately:</p>
-                <div id="crisis-contacts"></div>
-                <button onclick="showSection('home')" class="btn btn-primary">I've Reached Out</button>
+                <p class="crisis-alert">If you're in crisis or having thoughts of harm, please reach out immediately:</p>
+                <div id="crisis-contacts">
+                    <!-- Crisis contacts will be loaded here -->
+                </div>
+                <div class="crisis-resources">
+                    <h3>Additional Resources</h3>
+                    <div class="resource-links">
+                        <a href="#" class="resource-link">Coping Strategies</a>
+                        <a href="#" class="resource-link">Emergency Procedures</a>
+                        <a href="#" class="resource-link">Campus Resources</a>
+                    </div>
+                </div>
+                <button onclick="showSection('dashboard')" class="btn btn-primary">Back to Dashboard</button>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources" class="section">
+            <div class="resources-container">
+                <h2>Mental Health Resources</h2>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <h3><i class="fas fa-book"></i> Self-Help Guides</h3>
+                        <ul>
+                            <li>Managing Anxiety</li>
+                            <li>Stress Reduction Techniques</li>
+                            <li>Building Resilience</li>
+                            <li>Sleep Improvement</li>
+                        </ul>
+                    </div>
+                    <div class="resource-card">
+                        <h3><i class="fas fa-headphones"></i> Meditation & Mindfulness</h3>
+                        <ul>
+                            <li>Guided Meditation</li>
+                            <li>Breathing Exercises</li>
+                            <li>Mindfulness Practices</li>
+                            <li>Yoga for Mental Health</li>
+                        </ul>
+                    </div>
+                    <div class="resource-card">
+                        <h3><i class="fas fa-users"></i> Support Groups</h3>
+                        <ul>
+                            <li>Anxiety Support</li>
+                            <li>Depression Peer Group</li>
+                            <li>Stress Management</li>
+                            <li>General Wellness</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
